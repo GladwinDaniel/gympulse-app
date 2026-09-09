@@ -1,0 +1,166 @@
+/* Layout */
+.msg-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Member Selector */
+.msg-selector {
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.msg-selector-title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+
+.msg-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.msg-member-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.msg-member-item:hover {
+  background: var(--bg-glass-hover);
+}
+
+.msg-member-active {
+  background: rgba(108, 92, 231, 0.1) !important;
+  border: 1px solid var(--accent-primary);
+  border-radius: var(--radius-md);
+}
+
+.msg-member-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xs);
+  color: white;
+  flex-shrink: 0;
+}
+
+.msg-member-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-member-name {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+}
+
+.msg-member-email {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Compose */
+.msg-compose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.msg-compose-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.msg-compose-to {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* Sent History */
+.msg-sent-history {
+  margin-top: var(--space-2);
+}
+
+.msg-sent-title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-3);
+}
+
+.msg-sent-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.msg-sent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.msg-sent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.msg-sent-to {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.msg-sent-subject {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.msg-sent-time {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .msg-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .msg-selector {
+    width: 280px;
+    flex-shrink: 0;
+    max-height: 500px;
+  }
+  .msg-compose {
+    flex: 1;
+  }
+  .msg-member-list {
+    max-height: 350px;
+  }
+}

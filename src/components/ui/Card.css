@@ -1,0 +1,61 @@
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-normal);
+}
+
+.card-pad-none { padding: 0; }
+.card-pad-sm { padding: var(--space-3); }
+.card-pad-md { padding: var(--space-4); }
+.card-pad-lg { padding: var(--space-6); }
+
+.card-hover:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-md);
+}
+
+.card-clickable {
+  cursor: pointer;
+}
+.card-clickable:active {
+  transform: scale(0.98);
+}
+
+/* Variants */
+.card-gradient {
+  background: var(--gradient-card);
+}
+
+.card-outlined {
+  background: transparent;
+  border-color: var(--border-medium);
+}
+
+/* Glow effects */
+.card-glow-primary {
+  border-color: rgba(108, 92, 231, 0.3);
+  box-shadow: 0 0 15px rgba(108, 92, 231, 0.1);
+}
+.card-glow-primary:hover {
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.card-glow-green {
+  border-color: rgba(0, 230, 118, 0.3);
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.1);
+}
+.card-glow-green:hover {
+  box-shadow: var(--shadow-glow-secondary);
+}
+
+.card-glow-energy {
+  border-color: rgba(255, 107, 107, 0.3);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.1);
+}
+.card-glow-energy:hover {
+  box-shadow: var(--shadow-glow-energy);
+}

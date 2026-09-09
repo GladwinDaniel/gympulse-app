@@ -1,0 +1,121 @@
+.qr-display-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qr-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+  width: 100%;
+}
+
+.qr-type-toggle {
+  display: flex;
+  background: var(--bg-glass);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  gap: var(--space-1);
+}
+
+.qr-type-btn {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-tertiary);
+  transition: all var(--transition-fast);
+}
+.qr-type-btn:hover {
+  color: var(--text-secondary);
+}
+
+.qr-type-active {
+  color: white;
+}
+.qr-type-checkin {
+  background: var(--gradient-secondary);
+  color: #0a0a0f;
+}
+.qr-type-checkout {
+  background: var(--gradient-energy);
+}
+
+.qr-interval {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.qr-interval-select {
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  width: auto;
+}
+
+.qr-card {
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.qr-card-fullscreen {
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  border: none;
+  border-radius: 0;
+  background: var(--bg-primary);
+}
+
+.qr-label {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: 2px;
+  margin-bottom: var(--space-4);
+}
+
+.qr-code-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+}
+
+.qr-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.qr-timer-icon {
+  color: var(--accent-primary-light);
+}
+
+.qr-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+}

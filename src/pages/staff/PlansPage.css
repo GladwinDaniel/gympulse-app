@@ -1,0 +1,316 @@
+.sp-tab-content {
+  margin-top: var(--space-4);
+}
+
+.sp-workout-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sp-editor-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--space-1);
+}
+
+.sp-editor-day {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-2) var(--space-1);
+  color: var(--text-secondary);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}
+
+.sp-editor-day small {
+  overflow: hidden;
+  max-width: 100%;
+  color: var(--text-tertiary);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sp-editor-day-active {
+  color: var(--text-primary);
+  background: rgba(108, 92, 231, 0.18);
+  border-color: var(--accent-primary);
+}
+
+.sp-editor-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.sp-editor-exercise {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sp-editor-exercise > strong {
+  font-size: var(--text-sm);
+}
+
+.sp-editor-fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.sp-editor-empty {
+  padding: var(--space-5);
+  color: var(--text-secondary);
+  background: var(--bg-glass);
+  border: 1px dashed var(--border-medium);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 560px) {
+  .sp-editor-days {
+    overflow-x: auto;
+    grid-template-columns: repeat(7, 58px);
+    padding-bottom: var(--space-1);
+  }
+
+  .sp-editor-fields {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.sp-tab-desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.sp-assign-btn {
+  margin-bottom: var(--space-4);
+}
+
+/* Plans Grid */
+.sp-plans-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sp-plan-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sp-plan-color {
+  width: 8px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.sp-plan-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-plan-info h4 {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  margin-bottom: 2px;
+}
+
+.sp-plan-desc {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+.sp-plan-meta {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Assignments */
+.sp-assignments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sp-assign-card {
+  display: flex;
+  align-items: center;
+}
+
+.sp-assign-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sp-assign-info h4 {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.sp-assign-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+/* Assign Form */
+.sp-assign-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sp-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sp-form-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-secondary);
+}
+
+/* Member List */
+.sp-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.sp-member-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.sp-member-item:hover {
+  background: var(--bg-glass-hover);
+}
+
+.sp-member-active {
+  background: rgba(108, 92, 231, 0.15) !important;
+  border: 1px solid var(--accent-primary);
+}
+
+.sp-member-name {
+  flex: 1;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* Type Toggle */
+.sp-type-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.sp-type-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sp-type-btn:hover {
+  border-color: var(--border-medium);
+}
+
+.sp-type-active {
+  background: var(--accent-primary) !important;
+  border-color: var(--accent-primary) !important;
+  color: white;
+}
+
+/* Plan Options */
+.sp-plan-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.sp-plan-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-glass);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  text-align: left;
+  width: 100%;
+  transition: all var(--transition-fast);
+}
+
+.sp-plan-option:hover {
+  background: var(--bg-glass-hover);
+}
+
+.sp-plan-option-active {
+  background: rgba(0, 230, 118, 0.1) !important;
+  border: 1px solid var(--accent-secondary);
+}
+
+/* Duration */
+.sp-duration-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.sp-duration-btn {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sp-duration-active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}

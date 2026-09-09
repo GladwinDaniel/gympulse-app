@@ -1,0 +1,222 @@
+.back-btn {
+  margin-bottom: var(--space-3);
+}
+
+/* Header */
+.cd-header {
+  padding: var(--space-6) var(--space-4);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-6);
+  color: white;
+}
+
+.cd-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-extrabold);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  margin-bottom: var(--space-2);
+}
+
+.cd-desc {
+  font-size: var(--text-sm);
+  opacity: 0.9;
+  margin-bottom: var(--space-3);
+}
+
+.cd-meta {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Week Selector */
+.cd-week-selector {
+  margin-bottom: var(--space-6);
+}
+
+.cd-section-title {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.cd-days-row {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: space-between;
+}
+
+.cd-day-btn {
+  width: 44px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.cd-day-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+
+.cd-day-active {
+  background: var(--accent-primary) !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: var(--shadow-glow-primary);
+}
+
+.cd-day-active .cd-day-letter {
+  color: white;
+  font-weight: var(--weight-bold);
+}
+
+.cd-day-today::after {
+  content: 'Today';
+  position: absolute;
+  bottom: -18px;
+  font-size: 9px;
+  color: var(--accent-secondary);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cd-day-letter {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-secondary);
+}
+
+.cd-day-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-secondary);
+}
+
+/* Day Workout */
+.cd-day-workout {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.cd-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.cd-day-name {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+}
+
+.cd-day-label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* Rest Card */
+.cd-rest-card {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-rest-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.cd-rest-emoji {
+  font-size: 2.5rem;
+}
+
+.cd-rest-content h4 {
+  font-size: var(--text-lg);
+}
+
+.cd-rest-content p {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+/* Exercise List */
+.cd-exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cd-exercise-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.cd-exercise-num {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: white;
+  flex-shrink: 0;
+}
+
+.cd-exercise-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cd-exercise-name {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-base);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.cd-exercise-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.cd-exercise-meta span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.cd-exercise-rest {
+  color: var(--accent-energy-light);
+}
+
+/* Actions */
+.cd-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}

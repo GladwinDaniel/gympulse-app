@@ -1,0 +1,10 @@
+.member-layout {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.member-content {
+  flex: 1;
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px) + var(--space-4));
+}

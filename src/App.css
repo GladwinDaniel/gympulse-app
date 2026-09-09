@@ -1,0 +1,56 @@
+/* App-level styles — intentionally minimal, design system lives in index.css */
+
+.pending-page {
+	min-height: 100dvh;
+	display: grid;
+	place-items: center;
+	padding: var(--space-6);
+	background: var(--gradient-hero), var(--bg-primary);
+}
+
+.pending-card {
+	width: min(100%, 30rem);
+	padding: var(--space-10) var(--space-8);
+	text-align: center;
+	background: var(--bg-card);
+	border: 1px solid var(--border-medium);
+	border-radius: var(--radius-xl);
+	box-shadow: var(--shadow-xl);
+}
+
+.pending-icon {
+	width: 4rem;
+	height: 4rem;
+	margin: 0 auto var(--space-5);
+	display: grid;
+	place-items: center;
+	color: var(--accent-warning);
+	background: rgba(255, 217, 61, 0.12);
+	border: 1px solid rgba(255, 217, 61, 0.3);
+	border-radius: 50%;
+	font-size: 2rem;
+}
+
+.pending-kicker {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--space-2);
+	color: var(--text-accent);
+	font-weight: var(--weight-semibold);
+}
+
+.pending-card h1 {
+	margin: var(--space-3) 0 var(--space-4);
+}
+
+.pending-card p:not(.pending-kicker):not(.pending-note) {
+	color: var(--text-secondary);
+	line-height: var(--leading-relaxed);
+}
+
+.pending-note {
+	margin: var(--space-5) 0 var(--space-6);
+	color: var(--text-tertiary);
+	font-size: var(--text-sm);
+}

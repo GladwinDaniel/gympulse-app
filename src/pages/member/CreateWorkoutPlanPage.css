@@ -1,0 +1,226 @@
+.cwp-section {
+  margin-bottom: var(--space-6);
+}
+
+.cwp-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.cwp-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+/* Timer Mode */
+.cwp-mode-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.cwp-mode-btn {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.cwp-mode-btn:hover {
+  border-color: var(--border-medium);
+}
+
+.cwp-mode-btn svg {
+  font-size: 24px;
+  color: var(--text-secondary);
+}
+
+.cwp-mode-btn span {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+}
+
+.cwp-mode-btn small {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.cwp-mode-active {
+  border-color: var(--accent-primary) !important;
+  background: rgba(108, 92, 231, 0.1);
+}
+
+.cwp-mode-active svg {
+  color: var(--accent-primary);
+}
+
+/* Rest Row */
+.cwp-rest-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.cwp-rest-btn {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.cwp-rest-btn:hover {
+  border-color: var(--border-medium);
+}
+
+.cwp-rest-active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+}
+
+/* Empty */
+.cwp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  min-height: 100px;
+  justify-content: center;
+}
+
+.cwp-empty p {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
+/* Exercises */
+.cwp-exercises {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.cwp-exercise-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.cwp-ex-num {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: white;
+  flex-shrink: 0;
+}
+
+.cwp-ex-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cwp-ex-name {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.cwp-ex-meta {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.cwp-ex-delete {
+  color: var(--text-tertiary);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.cwp-ex-delete:hover {
+  color: var(--accent-energy);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* Add Form */
+.cwp-add-form {
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.cwp-add-title {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+
+.cwp-add-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.cwp-type-toggle {
+  display: flex;
+  flex-direction: column;
+}
+
+.cwp-type-btns {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cwp-type-btn {
+  flex: 1;
+  padding: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  background: var(--bg-glass);
+  transition: all var(--transition-fast);
+}
+
+.cwp-type-active {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.cwp-add-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+/* Save */
+.cwp-save {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-8);
+}

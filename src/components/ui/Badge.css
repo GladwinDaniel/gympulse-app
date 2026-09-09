@@ -1,0 +1,61 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.badge-sm {
+  padding: 2px 10px;
+  font-size: var(--text-xs);
+}
+.badge-md {
+  padding: 4px 14px;
+  font-size: var(--text-sm);
+}
+
+.badge-default {
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.badge-primary {
+  background: rgba(108, 92, 231, 0.15);
+  color: var(--accent-primary-light);
+  border: 1px solid rgba(108, 92, 231, 0.3);
+}
+
+.badge-success {
+  background: rgba(0, 230, 118, 0.12);
+  color: var(--accent-secondary-light);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.badge-warning {
+  background: rgba(255, 217, 61, 0.12);
+  color: var(--accent-warning);
+  border: 1px solid rgba(255, 217, 61, 0.3);
+}
+
+.badge-danger {
+  background: rgba(255, 107, 107, 0.12);
+  color: var(--accent-energy-light);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.badge-info {
+  background: rgba(79, 195, 247, 0.12);
+  color: var(--accent-info);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+}
+
+.badge-dot-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s infinite;
+}

@@ -1,0 +1,371 @@
+.anatomy-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
+  overflow: hidden;
+}
+
+.anatomy-container::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Controls Header */
+.anatomy-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.anatomy-view-toggles {
+  display: flex;
+  background: var(--bg-tertiary);
+  padding: 3px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.anatomy-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 6px 16px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.anatomy-toggle-btn.active {
+  background: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 229, 255, 0.35);
+  font-weight: var(--weight-semibold);
+}
+
+.anatomy-right-toggles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.anatomy-collapse-btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  color: var(--accent-primary);
+  padding: 6px 12px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.anatomy-collapse-btn:hover {
+  background: rgba(0, 229, 255, 0.12);
+}
+
+.anatomy-reset-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-medium);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  font-size: var(--text-xs);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.anatomy-reset-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary);
+}
+
+/* Stage Layout */
+.anatomy-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  background: radial-gradient(circle at center, rgba(16, 20, 42, 0.8) 0%, rgba(10, 12, 24, 0.95) 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+@media (min-width: 640px) {
+  .anatomy-stage {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: var(--space-6);
+  }
+}
+
+/* SVG Figure */
+.anatomy-svg-wrapper {
+  width: 100%;
+  max-width: 200px;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+}
+
+@media (min-width: 640px) {
+  .anatomy-svg-wrapper {
+    max-width: 240px;
+    height: 380px;
+  }
+}
+
+.anatomy-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  user-select: none;
+}
+
+/* Muscle Paths */
+.muscle-group {
+  fill: #1e223d;
+  stroke: #333a61;
+  stroke-width: 1.2;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.muscle-group:hover,
+.muscle-group.is-hovered {
+  fill: #3b447a;
+  stroke: #00e5ff;
+  stroke-width: 2;
+  filter: url(#glow-neon);
+}
+
+.muscle-group.is-selected {
+  fill: #ff4757 !important;
+  stroke: #ffffff !important;
+  stroke-width: 2.2 !important;
+  filter: drop-shadow(0 0 8px rgba(255, 71, 87, 0.7));
+  animation: pulse-muscle 2s infinite ease-in-out;
+}
+
+@keyframes pulse-muscle {
+  0% { fill: #ff4757; }
+  50% { fill: #ff6b81; }
+  100% { fill: #ff4757; }
+}
+
+/* Callout Info Banner */
+.anatomy-info-banner {
+  flex: 1;
+  width: 100%;
+  max-width: 380px;
+}
+
+.muscle-callout-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  animation: fade-in 0.2s ease;
+}
+
+.muscle-callout-card.empty {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-subtle);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.muscle-callout-prompt {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+}
+
+.muscle-callout-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.muscle-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.muscle-callout-title {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.muscle-active-badge {
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.4);
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.muscle-callout-desc {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}
+
+.muscle-callout-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.muscle-count-pill {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--accent-primary);
+}
+
+.muscle-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Collapsed Quick Select Muscle menu */
+.anatomy-quick-selector {
+  position: relative;
+  z-index: 2;
+}
+
+.anatomy-quick-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.anatomy-quick-trigger:hover,
+.anatomy-quick-selector.is-open .anatomy-quick-trigger {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+}
+
+.anatomy-quick-trigger span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.anatomy-quick-trigger strong {
+  font-size: var(--text-sm);
+}
+
+.anatomy-quick-trigger small {
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+}
+
+.anatomy-quick-trigger > svg {
+  color: var(--accent-primary-light);
+  transition: transform var(--transition-fast);
+}
+
+.anatomy-quick-selector.is-open .anatomy-quick-trigger > svg {
+  transform: rotate(180deg);
+}
+
+.anatomy-chips-list {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: var(--space-3);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.anatomy-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.anatomy-chip:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+.anatomy-chip.active {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.chip-count {
+  font-size: 11px;
+  opacity: 0.7;
+}
