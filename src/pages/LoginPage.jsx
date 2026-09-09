@@ -28,13 +28,22 @@ export default function LoginPage() {
       toast.success('Welcome back!');
       // Navigation handled by App.jsx based on role
     } catch (err) {
-      const msg = err.message || 'Login failed';
-      if (msg.includes('deactivated')) {
+      console.error('Login error:', err);
+      const code = err.code || '';
+      const msg = err.message || '';
+      if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
+        toast.error(
+          'Email/Password login is not enabled in Firebase Console! Please go to Firebase Console → Authentication → Sign-in method and enable Email/Password.',
+          { duration: 10000 }
+        );
+      } else if (msg.includes('deactivated')) {
         toast.error(msg);
-      } else if (msg.includes('user-not-found') || msg.includes('wrong-password') || msg.includes('invalid-credential')) {
-        toast.error('Invalid email or password');
+      } else if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential' || msg.includes('invalid-credential') || msg.includes('user-not-found')) {
+        toast.error('Invalid email or password. Please check your credentials or create an account.');
+      } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
+        toast.error('Invalid email address format.');
       } else {
-        toast.error(msg);
+        toast.error(msg || 'Login failed.');
       }
     } finally {
       setLoading(false);

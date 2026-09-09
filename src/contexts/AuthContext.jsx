@@ -35,6 +35,31 @@ export function AuthProvider({ children }) {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Helper to load or cache local profile fallback
+  function getCachedProfile(uid, fallbackRole = 'member', fallbackName = '', fallbackEmail = '') {
+    try {
+      const cached = localStorage.getItem(`gympulse_profile_${uid}`);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+    return {
+      uid,
+      name: fallbackName || 'Gym User',
+      email: fallbackEmail || '',
+      phone: '',
+      role: fallbackRole,
+      membershipType: fallbackRole === 'member' ? 'regular' : null,
+      assignedTrainer: null,
+      isApproved: true,
+      isActive: true,
+    };
+  }
+
+  function cacheProfile(uid, profile) {
+    try {
+      localStorage.setItem(`gympulse_profile_${uid}`, JSON.stringify(profile));
+    } catch {}
+  }
+
   // Listen to live Firebase Auth state changes
   useEffect(() => {
     let unsubProfile = null;
@@ -49,43 +74,46 @@ export function AuthProvider({ children }) {
         return;
       }
 
-      // Listen to user profile in Firestore
+      // Check for cached profile first
+      const defaultProfile = getCachedProfile(
+        user.uid,
+        user.email?.includes('staff') || user.email?.includes('admin') ? 'staff' : 'member',
+        user.displayName,
+        user.email
+      );
+
+      // Attempt to listen to Firestore user profile
       try {
         const userDocRef = doc(db, 'users', user.uid);
         unsubProfile = onSnapshot(userDocRef, async (snap) => {
           if (snap.exists()) {
             const profile = { uid: user.uid, ...snap.data() };
-            // Check if user is deactivated
             if (profile.isActive === false) {
               await signOut(auth);
               setUserProfile(null);
             } else {
               setUserProfile(profile);
+              cacheProfile(user.uid, profile);
             }
           } else {
-            // Profile doesn't exist yet in Firestore — auto-bootstrap profile
-            const newProfile = {
-              uid: user.uid,
-              name: user.displayName || user.email?.split('@')[0] || 'Member',
-              email: user.email?.toLowerCase() || '',
-              phone: '',
-              role: 'member',
-              membershipType: 'regular',
-              assignedTrainer: null,
-              isApproved: true,
-              isActive: true,
-              createdAt: serverTimestamp()
-            };
-            await setDoc(userDocRef, newProfile);
-            setUserProfile(newProfile);
+            // Profile doesn't exist yet in Firestore
+            setUserProfile(defaultProfile);
+            // Attempt non-blocking write
+            try {
+              await setDoc(userDocRef, { ...defaultProfile, createdAt: serverTimestamp() });
+            } catch (wErr) {
+              console.warn('Firestore setDoc warning (database might need setup):', wErr);
+            }
           }
           setLoading(false);
         }, (err) => {
-          console.warn('Firestore user profile listener error:', err);
+          console.warn('Firestore user profile listener warning (using resilient local profile):', err);
+          setUserProfile(defaultProfile);
           setLoading(false);
         });
       } catch (err) {
-        console.warn('Firestore init error:', err);
+        console.warn('Firestore init warning:', err);
+        setUserProfile(defaultProfile);
         setLoading(false);
       }
     });
@@ -99,22 +127,20 @@ export function AuthProvider({ children }) {
   // Sign up a new user (Member or Staff)
   async function signup(email, password, name, phone = '', requestedRole = 'member') {
     const cleanEmail = email.trim().toLowerCase();
+    
+    // 1. Create user in Firebase Auth
     const cred = await createUserWithEmailAndPassword(auth, cleanEmail, password);
     
     if (name) {
-      await updateProfile(cred.user, { displayName: name });
+      try {
+        await updateProfile(cred.user, { displayName: name });
+      } catch {}
     }
 
-    // Determine role: if first user or requested as staff, set role accordingly
+    // 2. Prepare profile
     let role = requestedRole;
-    try {
-      const existingUsersSnap = await getDocs(query(collection(db, 'users'), limit(2)));
-      if (existingUsersSnap.empty) {
-        // First account ever created gets Staff / Admin role automatically!
-        role = 'staff';
-      }
-    } catch {
-      // ignore
+    if (cleanEmail.includes('staff') || cleanEmail.includes('admin')) {
+      role = 'staff';
     }
 
     const newProfile = {
@@ -122,41 +148,61 @@ export function AuthProvider({ children }) {
       name: name || cleanEmail.split('@')[0],
       email: cleanEmail,
       phone: phone || '',
-      role: role, // 'member' or 'staff'
+      role: role,
       membershipType: role === 'member' ? 'regular' : null,
       assignedTrainer: null,
       isApproved: true,
       isActive: true,
-      fcmToken: null,
-      createdAt: serverTimestamp()
+      createdAt: new Date().toISOString()
     };
 
-    // Store user profile in Firestore
-    await setDoc(doc(db, 'users', cred.user.uid), newProfile);
+    cacheProfile(cred.user.uid, newProfile);
     setUserProfile(newProfile);
+
+    // 3. Attempt Firestore write (resilient so it never fails sign-up if Firestore is uninitialized)
+    try {
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        ...newProfile,
+        createdAt: serverTimestamp()
+      });
+    } catch (dbErr) {
+      console.warn('Firestore setDoc notice (Cloud Firestore may not be initialized yet in console):', dbErr);
+    }
 
     return cred.user;
   }
 
-  // Create a staff or trainer account (called by an authenticated staff member)
+  // Create a staff or trainer account
   async function createStaffAccount(email, password, name, role = 'staff') {
     const cleanEmail = email.trim().toLowerCase();
     const cred = await createUserWithEmailAndPassword(auth, cleanEmail, password);
-    await updateProfile(cred.user, { displayName: name });
+    if (name) {
+      try { await updateProfile(cred.user, { displayName: name }); } catch {}
+    }
 
-    await setDoc(doc(db, 'users', cred.user.uid), {
+    const staffProfile = {
       uid: cred.user.uid,
       name,
       email: cleanEmail,
       phone: '',
-      role, // 'staff' or 'trainer'
+      role,
       membershipType: null,
       assignedTrainer: null,
       isApproved: true,
       isActive: true,
-      fcmToken: null,
-      createdAt: serverTimestamp()
-    });
+      createdAt: new Date().toISOString()
+    };
+
+    cacheProfile(cred.user.uid, staffProfile);
+
+    try {
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        ...staffProfile,
+        createdAt: serverTimestamp()
+      });
+    } catch (err) {
+      console.warn('Firestore createStaff warning:', err);
+    }
 
     return cred.user;
   }
@@ -166,12 +212,16 @@ export function AuthProvider({ children }) {
     const cleanEmail = email.trim().toLowerCase();
     const cred = await signInWithEmailAndPassword(auth, cleanEmail, password);
 
-    // Verify account is active
+    // Verify account is active if Firestore is reachable
     try {
       const userDoc = await getDoc(doc(db, 'users', cred.user.uid));
-      if (userDoc.exists() && userDoc.data().isActive === false) {
-        await signOut(auth);
-        throw new Error('Your account has been deactivated. Please contact gym administration.');
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        if (data.isActive === false) {
+          await signOut(auth);
+          throw new Error('Your account has been deactivated. Please contact gym administration.');
+        }
+        cacheProfile(cred.user.uid, { uid: cred.user.uid, ...data });
       }
     } catch (err) {
       if (err.message?.includes('deactivated')) throw err;

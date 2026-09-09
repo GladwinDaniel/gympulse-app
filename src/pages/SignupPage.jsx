@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import { IoMail, IoLockClosed, IoPerson, IoCall, IoFitness, IoArrowBack } from 'react-icons/io5';
+import { IoMail, IoLockClosed, IoPerson, IoCall, IoFitness, IoArrowBack, IoShieldCheckmark, IoBarbell } from 'react-icons/io5';
 import toast from 'react-hot-toast';
 import './LoginPage.css'; // Reuse login styles
 
@@ -13,6 +13,7 @@ export default function SignupPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('member'); // 'member' or 'staff'
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -37,19 +38,33 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      await signup(email, password, name, phone);
-      toast.success('Account created. Waiting for staff approval.');
-      navigate('/member');
-    } catch (err) {
-      const msg = err.message || '';
-      if (msg.includes('email-already-in-use')) {
-        toast.error('An account with this email already exists');
-      } else if (msg.includes('weak-password')) {
-        toast.error('Password is too weak. Use at least 6 characters.');
-      } else if (msg.includes('invalid-email')) {
-        toast.error('Invalid email address');
+      const user = await signup(email, password, name, phone, role);
+      toast.success(`Account created! Welcome, ${name}! 🎉`);
+      if (role === 'staff') {
+        navigate('/staff');
       } else {
-        toast.error('Registration failed. Please try again.');
+        navigate('/member');
+      }
+    } catch (err) {
+      console.error('Registration error:', err);
+      const code = err.code || '';
+      const msg = err.message || '';
+
+      if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
+        toast.error(
+          'Email/Password sign-in is disabled in your Firebase Console! Open Firebase Console → Authentication → Sign-in method and click Enable on Email/Password.',
+          { duration: 10000 }
+        );
+      } else if (code === 'auth/email-already-in-use' || msg.includes('email-already-in-use')) {
+        toast.error('An account with this email already exists. Try logging in!');
+      } else if (code === 'auth/weak-password' || msg.includes('weak-password')) {
+        toast.error('Password is too weak. Please use at least 6 characters.');
+      } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
+        toast.error('Invalid email address format.');
+      } else if (code === 'auth/network-request-failed' || msg.includes('network-request-failed')) {
+        toast.error('Network connection error. Please check your internet connection.');
+      } else {
+        toast.error(msg || 'Registration failed. Please check your credentials.');
       }
     } finally {
       setLoading(false);
@@ -78,14 +93,34 @@ export default function SignupPage() {
         <div className="login-card glass-card-static">
           <form onSubmit={handleSignup} className="login-form">
             <h2 className="login-form-title">Join GymPulse</h2>
-            <p className="login-form-desc">Start your fitness journey today</p>
+            <p className="login-form-desc">Select your role and start today</p>
+
+            {/* Role Selection Toggle */}
+            <div className="signup-role-selector">
+              <button
+                type="button"
+                className={`signup-role-btn ${role === 'member' ? 'active' : ''}`}
+                onClick={() => setRole('member')}
+              >
+                <IoBarbell />
+                <span>Gym Member</span>
+              </button>
+              <button
+                type="button"
+                className={`signup-role-btn ${role === 'staff' ? 'active' : ''}`}
+                onClick={() => setRole('staff')}
+              >
+                <IoShieldCheckmark />
+                <span>Staff / Admin</span>
+              </button>
+            </div>
 
             <Input
               id="signup-name"
               label="Full Name"
               type="text"
               icon={IoPerson}
-              placeholder="John Doe"
+              placeholder="e.g. Alex Hunter"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -107,7 +142,7 @@ export default function SignupPage() {
               label="Phone (optional)"
               type="tel"
               icon={IoCall}
-              placeholder="+91 98765 43210"
+              placeholder="+1 555-0199"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
@@ -128,14 +163,14 @@ export default function SignupPage() {
               label="Confirm Password"
               type="password"
               icon={IoLockClosed}
-              placeholder="••••••••"
+              placeholder="Repeat password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
 
             <Button type="submit" fullWidth loading={loading} size="lg">
-              Create Account
+              Sign Up as {role === 'staff' ? 'Staff / Admin' : 'Member'}
             </Button>
           </form>
 

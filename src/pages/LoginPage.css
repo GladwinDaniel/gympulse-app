@@ -278,6 +278,42 @@
   color: var(--text-secondary);
 }
 
+/* Signup Role Selector */
+.signup-role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: var(--space-4);
+}
+
+.signup-role-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.signup-role-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.signup-role-btn.active {
+  background: rgba(134, 59, 255, 0.2);
+  border-color: #8b5cf6;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.3);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .login-card {
