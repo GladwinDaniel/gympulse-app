@@ -314,6 +314,24 @@
   box-shadow: 0 0 14px rgba(139, 92, 246, 0.3);
 }
 
+/* Auth Alert Banner */
+.auth-alert-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin-bottom: var(--space-4);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15);
+}
+
+.auth-alert-banner p {
+  margin: 0;
+  color: #fca5a5;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  font-weight: var(--weight-medium);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .login-card {

@@ -12,11 +12,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [resetMode, setResetMode] = useState(false);
+  const [errorBanner, setErrorBanner] = useState('');
   const { login, resetPassword } = useAuth();
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
+    setErrorBanner('');
     if (!email || !password) {
       toast.error('Please fill in all fields');
       return;
@@ -26,23 +28,29 @@ export default function LoginPage() {
     try {
       await login(email, password);
       toast.success('Welcome back!');
-      // Navigation handled by App.jsx based on role
     } catch (err) {
       console.error('Login error:', err);
       const code = err.code || '';
       const msg = err.message || '';
-      if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
-        toast.error(
-          'Email/Password login is not enabled in Firebase Console! Please go to Firebase Console → Authentication → Sign-in method and enable Email/Password.',
-          { duration: 10000 }
-        );
+      if (code === 'auth/configuration-not-found' || msg.includes('configuration-not-found')) {
+        const errText = 'Authentication is not activated yet in Firebase Console! Go to Firebase Console → Authentication and click "Get started".';
+        setErrorBanner(errText);
+        toast.error(errText, { duration: 10000 });
+      } else if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
+        const errText = 'Email/Password login is not enabled in Firebase Console! Go to Firebase Console → Authentication → Sign-in method and enable Email/Password.';
+        setErrorBanner(errText);
+        toast.error(errText, { duration: 10000 });
       } else if (msg.includes('deactivated')) {
+        setErrorBanner(msg);
         toast.error(msg);
       } else if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential' || msg.includes('invalid-credential') || msg.includes('user-not-found')) {
-        toast.error('Invalid email or password. Please check your credentials or create an account.');
+        setErrorBanner('Invalid email or password. Please check your credentials or click Create Account.');
+        toast.error('Invalid email or password.');
       } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
+        setErrorBanner('Invalid email address format.');
         toast.error('Invalid email address format.');
       } else {
+        setErrorBanner(msg || 'Login failed.');
         toast.error(msg || 'Login failed.');
       }
     } finally {
@@ -133,6 +141,12 @@ export default function LoginPage() {
             <form onSubmit={handleLogin} className="login-form">
               <h2 className="login-form-title">Welcome Back</h2>
               <p className="login-form-desc">Sign in to your account</p>
+
+              {errorBanner && (
+                <div className="auth-alert-banner">
+                  <p>{errorBanner}</p>
+                </div>
+              )}
 
               <Input
                 id="login-email"

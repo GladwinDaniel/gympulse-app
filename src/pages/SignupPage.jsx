@@ -15,11 +15,13 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('member'); // 'member' or 'staff'
   const [loading, setLoading] = useState(false);
+  const [errorBanner, setErrorBanner] = useState('');
   const { signup } = useAuth();
   const navigate = useNavigate();
 
   async function handleSignup(e) {
     e.preventDefault();
+    setErrorBanner('');
 
     if (!name || !email || !password || !confirmPassword) {
       toast.error('Please fill in all required fields');
@@ -50,21 +52,29 @@ export default function SignupPage() {
       const code = err.code || '';
       const msg = err.message || '';
 
-      if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
-        toast.error(
-          'Email/Password sign-in is disabled in your Firebase Console! Open Firebase Console → Authentication → Sign-in method and click Enable on Email/Password.',
-          { duration: 10000 }
-        );
+      if (code === 'auth/configuration-not-found' || msg.includes('configuration-not-found')) {
+        const errorText = 'Authentication is not activated yet! Open Firebase Console → Authentication and click the "Get started" button.';
+        setErrorBanner(errorText);
+        toast.error(errorText, { duration: 10000 });
+      } else if (code === 'auth/operation-not-allowed' || msg.includes('operation-not-allowed')) {
+        const errorText = 'Email/Password sign-in is disabled in your Firebase Console! Go to Authentication → Sign-in method and enable Email/Password.';
+        setErrorBanner(errorText);
+        toast.error(errorText, { duration: 10000 });
       } else if (code === 'auth/email-already-in-use' || msg.includes('email-already-in-use')) {
-        toast.error('An account with this email already exists. Try logging in!');
+        setErrorBanner('An account with this email already exists. Try logging in!');
+        toast.error('An account with this email already exists.');
       } else if (code === 'auth/weak-password' || msg.includes('weak-password')) {
-        toast.error('Password is too weak. Please use at least 6 characters.');
+        setErrorBanner('Password is too weak. Please use at least 6 characters.');
+        toast.error('Password is too weak. Use at least 6 characters.');
       } else if (code === 'auth/invalid-email' || msg.includes('invalid-email')) {
+        setErrorBanner('Invalid email address format.');
         toast.error('Invalid email address format.');
       } else if (code === 'auth/network-request-failed' || msg.includes('network-request-failed')) {
-        toast.error('Network connection error. Please check your internet connection.');
+        setErrorBanner('Network connection error. Please check your connection.');
+        toast.error('Network connection error.');
       } else {
-        toast.error(msg || 'Registration failed. Please check your credentials.');
+        setErrorBanner(msg || 'Registration failed. Please try again.');
+        toast.error(msg || 'Registration failed.');
       }
     } finally {
       setLoading(false);
@@ -94,6 +104,12 @@ export default function SignupPage() {
           <form onSubmit={handleSignup} className="login-form">
             <h2 className="login-form-title">Join GymPulse</h2>
             <p className="login-form-desc">Select your role and start today</p>
+
+            {errorBanner && (
+              <div className="auth-alert-banner">
+                <p>{errorBanner}</p>
+              </div>
+            )}
 
             {/* Role Selection Toggle */}
             <div className="signup-role-selector">
