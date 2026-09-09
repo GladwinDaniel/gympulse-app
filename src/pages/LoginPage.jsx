@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import { IoMail, IoLockClosed, IoFitness } from 'react-icons/io5';
+import { IoMail, IoLockClosed, IoFitness, IoDownloadOutline } from 'react-icons/io5';
 import toast from 'react-hot-toast';
 import './LoginPage.css';
 
@@ -85,6 +85,16 @@ export default function LoginPage() {
             Gym<span className="gradient-text">Pulse</span>
           </h1>
           <p className="login-tagline">Your complete gym companion</p>
+          
+          <button 
+            type="button"
+            className="login-install-pill"
+            onClick={() => window.dispatchEvent(new Event('gympulse-open-install'))}
+            title="Download / Install GymPulse app"
+          >
+            <IoDownloadOutline />
+            <span>Install / Download App</span>
+          </button>
         </div>
 
         {/* Form Card */}

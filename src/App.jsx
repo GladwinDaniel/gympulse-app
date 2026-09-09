@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoadingSpinner from './components/ui/LoadingSpinner';
+import InstallPrompt from './components/InstallPrompt';
 
 // Auth pages
 import LoginPage from './pages/LoginPage';
@@ -110,6 +111,7 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <AppRoutes />
+        <InstallPrompt />
         <Toaster
           position="top-center"
           toastOptions={{
