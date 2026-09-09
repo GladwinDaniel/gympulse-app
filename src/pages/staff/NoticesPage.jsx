@@ -16,12 +16,11 @@ import {
 } from 'react-icons/io5';
 import { formatDate } from '../../utils/dateUtils';
 import toast from 'react-hot-toast';
-import { DEMO_NOTICES } from '../../data/demoData';
 import './NoticesPage.css';
 
 export default function NoticesPage() {
   const { userProfile } = useAuth();
-  const [notices, setNotices] = useState(DEMO_NOTICES);
+  const [notices, setNotices] = useState([]);
   const [showCreate, setShowCreate] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -34,15 +33,13 @@ export default function NoticesPage() {
     try {
       const q = query(collection(db, 'notices'), orderBy('createdAt', 'desc'));
       const unsub = onSnapshot(q, (snap) => {
-        if (!snap.empty) {
-          setNotices(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-        }
-      }, () => {
-        // Keep DEMO_NOTICES
+        setNotices(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => {
+        console.warn('Firestore notices fetch warning:', err);
       });
       return () => unsub();
-    } catch {
-      // Keep DEMO_NOTICES
+    } catch (err) {
+      console.warn('Firestore notices query error:', err);
     }
   }, []);
 

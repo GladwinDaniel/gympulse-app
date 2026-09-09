@@ -12,15 +12,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [resetMode, setResetMode] = useState(false);
-  const { login, loginAsDemo, resetPassword } = useAuth();
+  const { login, resetPassword } = useAuth();
   const navigate = useNavigate();
-
-  function handleQuickDemo(emailKey) {
-    const success = loginAsDemo(emailKey);
-    if (success) {
-      toast.success(`Logged in as ${emailKey}`);
-    }
-  }
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -167,43 +160,6 @@ export default function LoginPage() {
               </Button>
             </form>
           )}
-
-          {/* Quick Demo Test Buttons */}
-          <div className="login-demo-section">
-            <div className="login-demo-header">
-              <span>⚡ Quick Demo Logins</span>
-            </div>
-            <div className="login-demo-grid">
-              <button
-                type="button"
-                className="demo-chip demo-chip-staff"
-                onClick={() => handleQuickDemo('staff@gym.com')}
-                title="Log in as Gym Staff / Admin"
-              >
-                <span className="demo-chip-role">Staff</span>
-                <span className="demo-chip-email">staff@gym.com</span>
-              </button>
-              <button
-                type="button"
-                className="demo-chip demo-chip-pt"
-                onClick={() => handleQuickDemo('pt@gym.com')}
-                title="Log in as Personal Training Member"
-              >
-                <span className="demo-chip-role">PT Member</span>
-                <span className="demo-chip-email">pt@gym.com</span>
-              </button>
-              <button
-                type="button"
-                className="demo-chip demo-chip-member"
-                onClick={() => handleQuickDemo('member@gym.com')}
-                title="Log in as Regular Gym Member"
-              >
-                <span className="demo-chip-role">Member</span>
-                <span className="demo-chip-email">member@gym.com</span>
-              </button>
-            </div>
-            <p className="demo-chip-note">Test password for all: <code>admin123</code> / <code>member123</code></p>
-          </div>
 
           <div className="login-divider">
             <span>New to GymPulse?</span>

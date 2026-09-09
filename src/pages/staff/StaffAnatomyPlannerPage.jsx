@@ -16,7 +16,8 @@ import {
   STARTER_WEEKLY_ROUTINE,
   DEFAULT_WEEK_DAYS
 } from '../../data/exercisesData';
-import { DEMO_MEMBERS } from '../../data/demoData';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from '../../config/firebase';
 import {
   IoAdd,
   IoSearch,
@@ -120,13 +121,28 @@ export default function StaffAnatomyPlannerPage() {
     });
   }, [exercisesList, selectedMuscle, equipmentFilter, difficultyFilter, searchQuery]);
 
+  const [members, setMembers] = useState([]);
+
+  // Fetch real members from Firestore
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'users'), where('role', '==', 'member'));
+      const unsub = onSnapshot(q, (snap) => {
+        setMembers(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
+      }, (err) => {
+        console.warn('Firestore members fetch error:', err);
+      });
+      return () => unsub();
+    } catch {}
+  }, []);
+
   // Filter active members for assignment
   const activeMembers = useMemo(() => {
-    return DEMO_MEMBERS.filter(m => m.isActive && (
-      m.name.toLowerCase().includes(memberSearch.toLowerCase()) ||
-      m.email.toLowerCase().includes(memberSearch.toLowerCase())
+    return members.filter(m => m.isActive !== false && (
+      (m.name || '').toLowerCase().includes(memberSearch.toLowerCase()) ||
+      (m.email || '').toLowerCase().includes(memberSearch.toLowerCase())
     ));
-  }, [memberSearch]);
+  }, [members, memberSearch]);
 
   function openAddModal(ex) {
     setExerciseToAdd(ex);

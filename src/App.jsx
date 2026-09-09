@@ -34,8 +34,15 @@ import PlansPage from './pages/staff/PlansPage';
 import StaffAnatomyPlannerPage from './pages/staff/StaffAnatomyPlannerPage';
 import CreateStaffAccountPage from './pages/staff/CreateStaffAccountPage';
 
+import { useEffect } from 'react';
+import { seedInitialFirestoreData } from './utils/firestoreSeed';
+
 function AppRoutes() {
   const { currentUser, userProfile, loading } = useAuth();
+
+  useEffect(() => {
+    seedInitialFirestoreData();
+  }, []);
 
   if (loading) {
     return <LoadingSpinner fullScreen text="Loading GymPulse..." />;

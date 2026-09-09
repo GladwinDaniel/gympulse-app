@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DEMO_MEMBERS } from '../../data/demoData';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from '../../config/firebase';
 import { WORKOUT_CATEGORIES } from '../../data/workoutData';
 import { PREDEFINED_DIET_PLANS } from '../../data/dietData';
 import Card from '../../components/ui/Card';
@@ -52,10 +53,24 @@ export default function StaffPlansPage() {
   const [editWorkoutDescription, setEditWorkoutDescription] = useState('');
   const [editDayLabel, setEditDayLabel] = useState('');
   const [editExercises, setEditExercises] = useState([]);
+  const [members, setMembers] = useState([]);
 
-  const activeMembers = DEMO_MEMBERS.filter(m => m.isActive);
+  // Fetch real members from Firestore
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'users'), where('role', '==', 'member'));
+      const unsub = onSnapshot(q, (snap) => {
+        setMembers(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
+      }, (err) => {
+        console.warn('Firestore plans members warning:', err);
+      });
+      return () => unsub();
+    } catch {}
+  }, []);
+
+  const activeMembers = members.filter(m => m.isActive !== false);
   const filteredMembers = activeMembers.filter(m =>
-    m.name?.toLowerCase().includes(memberSearch.toLowerCase())
+    (m.name || '').toLowerCase().includes(memberSearch.toLowerCase())
   );
 
   function openWorkoutEditor(plan) {

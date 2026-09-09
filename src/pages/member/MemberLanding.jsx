@@ -16,17 +16,16 @@ import {
   IoCalendar,
 } from 'react-icons/io5';
 import { formatDate } from '../../utils/dateUtils';
-import { DEMO_NOTICES } from '../../data/demoData';
 import { DEMO_WEEKLY_ASSIGNMENT, WORKOUT_CATEGORIES } from '../../data/workoutData';
 import './MemberLanding.css';
 
 export default function MemberLanding() {
   const { userProfile } = useAuth();
   const navigate = useNavigate();
-  const [notices, setNotices] = useState(DEMO_NOTICES);
+  const [notices, setNotices] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
 
-  // Fetch latest notices
+  // Fetch latest notices from Firestore
   useEffect(() => {
     try {
       const q = query(
@@ -36,17 +35,13 @@ export default function MemberLanding() {
       );
 
       const unsub = onSnapshot(q, (snap) => {
-        if (!snap.empty) {
-          setNotices(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-        }
-      }, () => {
-        // Keep DEMO_NOTICES
+        setNotices(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => {
+        console.warn('Firestore member notices warning:', err);
       });
 
       return () => unsub();
-    } catch {
-      // Keep DEMO_NOTICES
-    }
+    } catch {}
   }, []);
 
   // Fetch unread message count

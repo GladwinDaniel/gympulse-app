@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if user is accessing their own document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || isAuthenticated();
+    }
+
+    // Workouts & custom routines
+    match /workouts/{workoutId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Exercises library
+    match /exercises/{exerciseId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Attendance logs
+    match /attendance/{attendanceId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Notices & announcements
+    match /notices/{noticeId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Messages between members & staff/trainer
+    match /messages/{messageId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Default fallback for any other collection during testing
+    match /{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

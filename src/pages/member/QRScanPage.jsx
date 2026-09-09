@@ -1,4 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
+import { collection, addDoc, serverTimestamp, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import { useAuth } from '../../contexts/AuthContext';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
@@ -14,6 +17,7 @@ import toast from 'react-hot-toast';
 import './QRScanPage.css';
 
 export default function QRScanPage() {
+  const { userProfile } = useAuth();
   const [scanning, setScanning] = useState(false);
   const [scanResult, setScanResult] = useState(null);
   const [todayStatus, setTodayStatus] = useState(() => {
@@ -30,6 +34,24 @@ export default function QRScanPage() {
   });
   const scannerRef = useRef(null);
   const html5QrCodeRef = useRef(null);
+
+  // Sync attendance history from Firestore
+  useEffect(() => {
+    if (!userProfile?.uid) return;
+    try {
+      const q = query(
+        collection(db, 'attendance'),
+        where('userId', '==', userProfile.uid)
+      );
+      const unsub = onSnapshot(q, (snap) => {
+        if (!snap.empty) {
+          const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          // update history if available
+        }
+      }, () => {});
+      return () => unsub();
+    } catch {}
+  }, [userProfile?.uid]);
 
   async function startScanner() {
     setScanning(true);
@@ -130,6 +152,23 @@ export default function QRScanPage() {
       setTodayStatus(data);
       localStorage.setItem('gympulse_attendance_today', JSON.stringify(data));
       setScanResult({ type: 'checkin', time: now });
+
+      if (userProfile?.uid) {
+        try {
+          addDoc(collection(db, 'attendance'), {
+            userId: userProfile.uid,
+            userName: userProfile.name || 'Member',
+            userEmail: userProfile.email || '',
+            date: formatDate(now, 'yyyy-MM-dd'),
+            checkInTime: now.toISOString(),
+            type: 'checkin',
+            createdAt: serverTimestamp()
+          });
+        } catch (e) {
+          console.warn('Firestore attendance log error:', e);
+        }
+      }
+
       toast.success('Checked in! Let\'s go! 🔥');
     }
   }

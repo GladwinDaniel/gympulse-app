@@ -22,14 +22,14 @@ import './StaffDashboard.css';
 export default function StaffDashboard() {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
-    totalMembers: 312,
-    activeMembers: 298,
-    ptMembers: 42,
-    todayAttendance: 86
+    totalMembers: 0,
+    activeMembers: 0,
+    ptMembers: 0,
+    todayAttendance: 0
   });
   const [recentActivity, setRecentActivity] = useState([]);
 
-  // Fetch member stats
+  // Fetch real member stats
   useEffect(() => {
     try {
       const membersQuery = query(
@@ -38,22 +38,20 @@ export default function StaffDashboard() {
       );
 
       const unsub = onSnapshot(membersQuery, (snap) => {
-        if (!snap.empty) {
-          const members = snap.docs.map(d => d.data());
-          setStats(prev => ({
-            ...prev,
-            totalMembers: members.length,
-            activeMembers: members.filter(m => m.isActive).length,
-            ptMembers: members.filter(m => m.membershipType === 'pt').length,
-          }));
-        }
+        const members = snap.docs.map(d => d.data());
+        setStats(prev => ({
+          ...prev,
+          totalMembers: members.length,
+          activeMembers: members.filter(m => m.isActive !== false).length,
+          ptMembers: members.filter(m => m.membershipType === 'pt').length,
+        }));
       }, (err) => {
-        // Fall back to demo stats
+        console.warn('Firestore member stats warning:', err);
       });
 
       return () => unsub();
-    } catch {
-      // Use demo stats
+    } catch (err) {
+      console.warn('Firestore query error:', err);
     }
   }, []);
 

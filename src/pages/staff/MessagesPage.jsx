@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import { collection, query, where, onSnapshot, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { useAuth } from '../../contexts/AuthContext';
-import { DEMO_MEMBERS } from '../../data/demoData';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
@@ -26,10 +25,8 @@ export default function StaffMessagesPage() {
   const [searchParams] = useSearchParams();
   const preselectedMemberId = searchParams.get('to');
 
-  const [members, setMembers] = useState(DEMO_MEMBERS.filter(m => m.isActive));
-  const [selectedMember, setSelectedMember] = useState(
-    preselectedMemberId ? DEMO_MEMBERS.find(m => m.uid === preselectedMemberId) : null
-  );
+  const [members, setMembers] = useState([]);
+  const [selectedMember, setSelectedMember] = useState(null);
   const [memberSearch, setMemberSearch] = useState('');
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
@@ -38,18 +35,23 @@ export default function StaffMessagesPage() {
     return JSON.parse(localStorage.getItem('gympulse_sent_messages') || '[]');
   });
 
-  // Try to load real members from Firestore
+  // Load real members from Firestore
   useEffect(() => {
     try {
       const q = query(collection(db, 'users'), where('role', '==', 'member'));
       const unsub = onSnapshot(q, (snap) => {
-        if (!snap.empty) {
-          setMembers(snap.docs.map(d => ({ uid: d.id, ...d.data() })).filter(m => m.isActive));
+        const loaded = snap.docs.map(d => ({ uid: d.id, ...d.data() })).filter(m => m.isActive !== false);
+        setMembers(loaded);
+        if (preselectedMemberId) {
+          const found = loaded.find(m => m.uid === preselectedMemberId);
+          if (found) setSelectedMember(found);
         }
-      }, () => {});
+      }, (err) => {
+        console.warn('Firestore members fetch warning:', err);
+      });
       return () => unsub();
     } catch {}
-  }, []);
+  }, [preselectedMemberId]);
 
   const filteredMembers = members.filter(m =>
     m.name?.toLowerCase().includes(memberSearch.toLowerCase()) ||

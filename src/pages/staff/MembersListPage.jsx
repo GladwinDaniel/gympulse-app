@@ -22,12 +22,12 @@ import {
 } from 'react-icons/io5';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
-import { DEMO_MEMBERS } from '../../data/demoData';
 import './MembersListPage.css';
 
 export default function MembersListPage() {
   const navigate = useNavigate();
-  const [members, setMembers] = useState(DEMO_MEMBERS);
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all'); // all, pending, active, inactive, pt
   const [selectedMember, setSelectedMember] = useState(null);
@@ -41,16 +41,16 @@ export default function MembersListPage() {
       );
 
       const unsub = onSnapshot(q, (snap) => {
-        if (!snap.empty) {
-          setMembers(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
-        }
-      }, () => {
-        // Keep DEMO_MEMBERS
+        setMembers(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
+        setLoading(false);
+      }, (err) => {
+        console.warn('Firestore members fetch warning:', err);
+        setLoading(false);
       });
 
       return () => unsub();
     } catch {
-      // Keep DEMO_MEMBERS
+      setLoading(false);
     }
   }, []);
 
